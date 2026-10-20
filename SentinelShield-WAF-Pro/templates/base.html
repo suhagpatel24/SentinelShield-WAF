@@ -1,0 +1,6 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SentinelShield</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
+<body><nav><div class="nav"><a class="brand" href="{{ url_for('dashboard') }}">🛡 SentinelShield</a>
+<a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('incidents') }}">Incidents</a>
+<a href="{{ url_for('analytics') }}">Analytics</a><a href="{{ url_for('export_csv') }}">Export CSV</a>
+<a href="{{ url_for('logout') }}">Logout</a></div></nav>{% block content %}{% endblock %}</body></html>

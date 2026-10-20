@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block content %}<div class="wrap"><div class="top"><div><h1>Incident #{{incident.id}}</h1><div class="muted">{{incident.timestamp}}</div></div></div>
+<div class="grid two"><div class="card"><div class="label">Detection</div><h2>{{incident.attack_type}}</h2><p>Severity: <span class="badge {{incident.severity|lower}}">{{incident.severity}}</span></p><p>Threat score: <b>{{incident.threat_score}}</b></p><p>Action: <b>{{incident.action}}</b></p></div>
+<div class="card"><div class="label">Source intelligence</div><p>IP: <b>{{incident.ip_address}}</b></p><p>Type: <b>{{incident.ip_type}}</b></p><p>Country: <b>{{incident.country}}</b></p><p>Method: <b>{{incident.method}}</b></p></div></div>
+<div class="card" style="margin-top:16px"><div class="label">Request</div><p><b>URL</b></p><pre style="white-space:pre-wrap">{{incident.url}}</pre><p><b>User agent</b></p><pre style="white-space:pre-wrap">{{incident.user_agent}}</pre></div></div>{% endblock %}

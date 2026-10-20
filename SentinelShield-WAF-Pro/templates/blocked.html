@@ -1,0 +1,1 @@
+{% extends "base.html" %}{% block content %}<div class="wrap"><div class="card"><h1 class="bad">Request Blocked</h1><p>The SentinelShield WAF detected malicious request patterns.</p><p>Threat score: <b>{{score}}</b></p><ul>{% for x in detections %}<li>{{x}}</li>{% endfor %}</ul><a href="{{url_for('dashboard')}}">Return to dashboard</a></div></div>{% endblock %}

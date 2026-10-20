@@ -1,0 +1,6 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login | SentinelShield</title><link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}"></head>
+<body><div class="login card"><div class="label">Security Operations Center</div><h1>🛡 SentinelShield</h1><p class="muted">Dashboard authentication</p>
+{% if error %}<div class="notice bad">{{ error }}</div>{% endif %}
+<form method="post"><p><label>Username<input class="input" name="username" autocomplete="username" required></label></p>
+<p><label>Password<input class="input" type="password" name="password" autocomplete="current-password" required></label></p>
+<button type="submit">Sign in</button></form><p class="muted" style="font-size:12px">Default development login: admin / ChangeMe_123!</p></div></body></html>

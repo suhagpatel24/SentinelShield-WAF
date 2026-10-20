@@ -1,0 +1,593 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="wrap">
+
+    <div class="top">
+        <div>
+            <h1>Security Operations Dashboard</h1>
+            <div class="muted">Live telemetry refreshes every 3 seconds.</div>
+        </div>
+    </div>
+
+
+    <!-- MAIN STATISTICS -->
+    <div class="grid cards">
+
+        <div class="card">
+            <div class="label">Requests</div>
+            <div class="metric" id="total">0</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Blocked</div>
+            <div class="metric bad" id="blocked">0</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Allowed</div>
+            <div class="metric good" id="allowed">0</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Incidents</div>
+            <div class="metric" id="incidents">0</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Block rate</div>
+            <div class="metric warn" id="rate">0%</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Threat score</div>
+            <div class="metric bad" id="score">0</div>
+        </div>
+
+    </div>
+
+
+    <!-- CHARTS -->
+    <div class="grid two" style="margin-top:16px">
+
+        <div class="card chartbox">
+            <div class="label">Requests / threats over last 24h</div>
+            <canvas id="trend"></canvas>
+        </div>
+
+        <div class="card">
+            <div class="label">Attack distribution</div>
+            <div id="attacks">
+                <div class="muted">Loading...</div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ALERTS + SYSTEM -->
+    <div class="grid two" style="margin-top:16px">
+
+        <div class="card">
+            <div class="label">Recent alerts</div>
+
+            <div id="alerts">
+                <div class="muted">Loading...</div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="label">System health</div>
+
+            <div id="system">
+                <div class="muted">Loading...</div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function getJSON(url) {
+
+    const response = await fetch(url, {
+        cache: "no-store"
+    });
+
+    if (!response.ok) {
+        throw new Error("Request failed: " + response.status);
+    }
+
+    return await response.json();
+}
+
+
+async function refresh() {
+
+    try {
+
+        /*
+         * -------------------------
+         * LIVE DASHBOARD DATA
+         * -------------------------
+         */
+
+        const s = await getJSON("/api/live");
+
+
+        const totalRequests =
+            Number(s.total_requests || 0);
+
+        const blockedRequests =
+            Number(s.blocked_requests || 0);
+
+        const allowedRequests =
+            Number(s.allowed_requests || 0);
+
+        const incidentCount =
+            Number(s.incidents || 0);
+
+        const threatScore =
+            Number(s.threat_score || 0);
+
+
+        /*
+         * Calculate block rate ourselves.
+         *
+         * This prevents:
+         *
+         * undefined%
+         *
+         */
+
+        let blockRate = 0;
+
+        if (totalRequests > 0) {
+
+            blockRate =
+                (blockedRequests / totalRequests) * 100;
+
+        }
+
+
+        blockRate = blockRate.toFixed(1);
+
+
+        /*
+         * Update statistics
+         */
+
+        document.getElementById("total").textContent =
+            totalRequests;
+
+        document.getElementById("blocked").textContent =
+            blockedRequests;
+
+        document.getElementById("allowed").textContent =
+            allowedRequests;
+
+        document.getElementById("incidents").textContent =
+            incidentCount;
+
+        document.getElementById("rate").textContent =
+            blockRate + "%";
+
+        document.getElementById("score").textContent =
+            threatScore;
+
+
+        /*
+         * -------------------------
+         * ATTACK DISTRIBUTION
+         * -------------------------
+         */
+
+        const attackContainer =
+            document.getElementById("attacks");
+
+        const attackStats =
+            Array.isArray(s.attack_stats)
+                ? s.attack_stats
+                : [];
+
+
+        if (attackStats.length === 0) {
+
+            attackContainer.innerHTML =
+                '<span class="muted">No incidents yet.</span>';
+
+        } else {
+
+            attackContainer.innerHTML =
+                attackStats.map(function (x) {
+
+                    const count =
+                        Number(x.n || 0);
+
+                    const width =
+                        Math.min(100, count * 10);
+
+                    return `
+                        <div class="barrow">
+
+                            <span>
+                                ${escapeHTML(x.attack_type || "Unknown")}
+                            </span>
+
+                            <span class="bar">
+                                <i style="width:${width}%"></i>
+                            </span>
+
+                            <b>${count}</b>
+
+                        </div>
+                    `;
+
+                }).join("");
+
+        }
+
+
+        /*
+         * -------------------------
+         * ALERTS
+         * -------------------------
+         */
+
+        const alertData =
+            await getJSON("/api/alerts");
+
+        const alertContainer =
+            document.getElementById("alerts");
+
+        const alertList =
+            Array.isArray(alertData.alerts)
+                ? alertData.alerts
+                : [];
+
+
+        if (alertList.length === 0) {
+
+            alertContainer.innerHTML =
+                '<span class="muted">No alerts.</span>';
+
+        } else {
+
+            alertContainer.innerHTML =
+                alertList.slice(0, 8).map(function (x) {
+
+                    return `
+                        <div class="alert">
+
+                            <b>
+                                ${escapeHTML(x.title || "Alert")}
+                            </b>
+
+                            <div class="muted">
+
+                                ${escapeHTML(x.timestamp || "")}
+
+                                ·
+
+                                ${escapeHTML(x.message || "")}
+
+                            </div>
+
+                        </div>
+                    `;
+
+                }).join("");
+
+        }
+
+
+        /*
+         * -------------------------
+         * SYSTEM HEALTH
+         * -------------------------
+         */
+
+        const m =
+            await getJSON("/api/system");
+
+
+        const cpu =
+            Number(m.cpu_percent || 0);
+
+        const memory =
+            Number(m.memory_percent || 0);
+
+        const disk =
+            Number(m.disk_percent || 0);
+
+        const processes =
+            Number(m.process_count || 0);
+
+
+        document.getElementById("system").innerHTML = `
+
+            <p>
+                CPU:
+                <b>${cpu}%</b>
+            </p>
+
+            <p>
+                Memory:
+                <b>${memory}%</b>
+            </p>
+
+            <p>
+                Disk:
+                <b>${disk}%</b>
+            </p>
+
+            <p>
+                Processes:
+                <b>${processes}</b>
+            </p>
+
+        `;
+
+
+        /*
+         * -------------------------
+         * TREND CHART
+         * -------------------------
+         */
+
+        draw(
+            Array.isArray(s.hourly_stats)
+                ? s.hourly_stats
+                : []
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Dashboard refresh error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*
+ * Basic HTML escaping.
+ *
+ * Prevents API/database text from
+ * being inserted as executable HTML.
+ */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/*
+ * -------------------------
+ * TREND CHART
+ * -------------------------
+ */
+
+function draw(rows) {
+
+    const canvas =
+        document.getElementById("trend");
+
+    if (!canvas) {
+        return;
+    }
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    const pixelRatio =
+        window.devicePixelRatio || 1;
+
+
+    const width =
+        canvas.clientWidth || 600;
+
+    const height =
+        260;
+
+
+    canvas.width =
+        width * pixelRatio;
+
+    canvas.height =
+        height * pixelRatio;
+
+
+    ctx.setTransform(
+        pixelRatio,
+        0,
+        0,
+        pixelRatio,
+        0,
+        0
+    );
+
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /*
+     * Empty chart
+     */
+
+    if (!rows || rows.length === 0) {
+
+        ctx.fillStyle = "#8b9aad";
+
+        ctx.font = "14px sans-serif";
+
+        ctx.fillText(
+            "No telemetry data yet.",
+            35,
+            50
+        );
+
+        return;
+    }
+
+
+    /*
+     * Grid lines
+     */
+
+    ctx.strokeStyle =
+        "#1d344c";
+
+    ctx.lineWidth =
+        1;
+
+
+    for (
+        let y = 30;
+        y < height - 30;
+        y += 45
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            35,
+            y
+        );
+
+        ctx.lineTo(
+            width - 15,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /*
+     * Values
+     */
+
+    const values =
+        rows.map(function (x) {
+
+            return Number(x.n || 0);
+
+        });
+
+
+    const max =
+        Math.max(
+            1,
+            ...values
+        );
+
+
+    /*
+     * Draw line
+     */
+
+    ctx.strokeStyle =
+        "#45d3ff";
+
+    ctx.lineWidth =
+        2;
+
+    ctx.beginPath();
+
+
+    rows.forEach(function (x, index) {
+
+        const px =
+            35 +
+            (
+                index *
+                Math.max(
+                    1,
+                    (width - 55) /
+                    Math.max(
+                        1,
+                        rows.length - 1
+                    )
+                )
+            );
+
+
+        const py =
+            height -
+            30 -
+            (
+                (Number(x.n || 0) / max) *
+                (height - 65)
+            );
+
+
+        if (index === 0) {
+
+            ctx.moveTo(
+                px,
+                py
+            );
+
+        } else {
+
+            ctx.lineTo(
+                px,
+                py
+            );
+
+        }
+
+    });
+
+
+    ctx.stroke();
+
+}
+
+
+/*
+ * Initial dashboard load
+ */
+
+refresh();
+
+
+/*
+ * Refresh every 3 seconds
+ */
+
+setInterval(
+    refresh,
+    3000
+);
+
+</script>
+
+{% endblock %}
+```
