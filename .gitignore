@@ -214,6 +214,26 @@ tempCodeRunnerFile.py
 # Marimo
 marimo/_static/
 marimo/_lsp/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+
+# Secrets and environment files
+.env
+.env.*
+
+# Runtime database and logs
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
 __marimo__/
 
 # Streamlit
