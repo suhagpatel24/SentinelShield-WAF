@@ -1,55 +1,80 @@
-# SentinelShield — Advanced Intrusion Detection & Web Protection System
+# SentinelShield — Web Application Firewall (WAF)
 
-A local Flask-based defensive security operations dashboard combining WAF detection, persistent incident logging, live telemetry, analytics, filtering, IP classification, CSV export, alerts, system/process monitoring, heuristic anomaly detection and dashboard authentication.
+A Python Flask-based defensive security project for detecting suspicious web requests and monitoring security incidents.
 
 ## Features
 
-1. Real-time dashboard — polls live statistics, alerts and system telemetry.
-2. Interactive attack charts — canvas trend chart plus dynamic attack bars.
-3. Advanced incident filtering — search, attack type, severity, action, IP and date range.
-4. IP intelligence — classifies loopback/private/public/link-local/reserved addresses and attempts reverse DNS.
-5. CSV incident export.
-6. Alert system — persistent in-app alerts and log file.
-7. System/process monitoring — CPU, RAM, disk and process telemetry via psutil.
-8. Anomaly detection — simple explainable traffic-spike heuristic.
-9. Dashboard authentication — session-based login with password hashing.
-10. GitHub/portfolio-ready structure and documentation.
+- Real-time security dashboard
+- Web attack detection using pattern matching
+- Security incident logging and filtering
+- IP address classification and reverse DNS lookup
+- CSV incident export
+- In-app alerts and log monitoring
+- System and process monitoring
+- Heuristic traffic-anomaly detection
+- Session-based dashboard authentication
+- REST API endpoints for monitoring
 
-## Run
+## Technology Stack
+
+- Python
+- Flask
+- SQLite
+- HTML and CSS
+- JavaScript
+- psutil
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/suhagpatel24/SentinelShield-WAF.git
+cd SentinelShield-WAF/SentinelShield-WAF-Pro
+```
+
+### 2. Create and activate a virtual environment
+
+Windows PowerShell:
 
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
+
+```powershell
 pip install -r requirements.txt
+```
+
+### 4. Run the application
+
+```powershell
 python app.py
 ```
 
-Open http://127.0.0.1:5000
+Open http://127.0.0.1:5000 in your browser.
 
-Development login:
-- Username: `admin`
-- Password: `ChangeMe_123!`
+**Authentication:** Configure your own administrator credentials and secret key using environment variables supported by the application. Do not publish real passwords, secret keys, or other credentials.
 
-Change credentials using environment variables before sharing the project.
+## Security Testing
 
-## WAF tests
+Test the application only on systems you own or have explicit permission to assess.
 
-Normal:
-`http://127.0.0.1:5000/`
+Example test categories:
 
-SQL injection:
-`http://127.0.0.1:5000/?id=%27%20OR%201%3D1%20--`
+- SQL injection detection
+- Cross-site scripting (XSS) detection
+- Path traversal detection
+- Command-injection pattern detection
+- Request-rate monitoring
 
-XSS:
-`http://127.0.0.1:5000/?name=%3Cscript%3Ealert(1)%3C%2Fscript%3E`
+Detection results depend on the implemented rules and application configuration.
 
-Traversal:
-`http://127.0.0.1:5000/?file=../../etc/passwd`
+## API Endpoints
 
-Command injection:
-`http://127.0.0.1:5000/?cmd=%3Bwhoami`
-
-## API endpoints
+The application may provide the following endpoints, depending on the configured routes:
 
 - `/health`
 - `/api/live`
@@ -60,8 +85,14 @@ Command injection:
 - `/api/anomaly`
 - `/api/ip/<ip>`
 
-## Security notes
+## Security Disclaimer
 
-This is a defensive educational/local project. The WAF uses pattern matching, so it is not a substitute for a production WAF. The anomaly detector is intentionally explainable and heuristic rather than a trained ML model. IP intelligence is local and does not claim geolocation accuracy.
+SentinelShield is an educational defensive-security project. Pattern-based detection can produce false positives and false negatives and should not be considered a replacement for a professionally configured production WAF.
 
-Before public deployment: change the secret key and admin password, disable debug mode, use HTTPS, add CSRF protection, add a production server, and consider a mature WAF/reverse proxy.
+Before deployment, configure secure credentials and secret keys, disable Flask debug mode, use HTTPS and a production-grade server, implement appropriate CSRF protection, and review access controls.
+
+## Author
+
+**Suhag Patel**
+
+GitHub: [@suhagpatel24](https://github.com/suhagpatel24)
