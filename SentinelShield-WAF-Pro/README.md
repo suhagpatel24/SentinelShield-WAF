@@ -1,98 +1,171 @@
-# SentinelShield — Web Application Firewall (WAF)
+# 🛡️ SentinelShield — Web Application Firewall (WAF)
 
-A Python Flask-based defensive security project for detecting suspicious web requests and monitoring security incidents.
+**A Python Flask-based defensive security project for monitoring HTTP requests, detecting suspicious activity, and recording security incidents.**
 
-## Features
+SentinelShield is a learning-oriented Web Application Firewall (WAF) dashboard developed to explore web application security, request inspection, incident logging, and security analytics.
 
-- Real-time security dashboard
-- Web attack detection using pattern matching
-- Security incident logging and filtering
-- IP address classification and reverse DNS lookup
-- CSV incident export
-- In-app alerts and log monitoring
-- System and process monitoring
-- Heuristic traffic-anomaly detection
-- Session-based dashboard authentication
-- REST API endpoints for monitoring
+## ✨ Features
 
-## Technology Stack
+- **Security Dashboard** — View request and incident statistics.
+- **Request Inspection** — Inspect incoming HTTP requests for suspicious patterns.
+- **Threat Detection** — Apply configured detection rules to identify potentially malicious requests.
+- **Incident Logging** — Store security events for investigation and review.
+- **Incident Management** — Browse and inspect recorded incidents.
+- **Search and Filtering** — Search security records using the available interface.
+- **Analytics** — Visualize security activity using dashboard statistics and charts.
+- **CSV Export** — Export supported incident data for further analysis.
+- **IP Intelligence** — Classify or inspect IP-related information using the implemented functionality.
+- **Monitoring and Alerts** — Explore supported system monitoring and alert features.
 
-- Python
-- Flask
-- SQLite
-- HTML and CSS
-- JavaScript
-- psutil
+*Note: Available functionality depends on the current implementation and configuration. Authentication is not implemented in this version.*
 
-## Getting Started
+## 🧰 Technology Stack
 
-### 1. Clone the repository
+- **Language:** Python
+- **Web Framework:** Flask
+- **Frontend:** HTML, CSS, JavaScript
+- **Database:** SQLite
+- **Development Tools:** Visual Studio Code, Git, and GitHub
+
+## 📁 Project Structure
+
+```text
+SentinelShield-WAF-Pro/
+├── app.py
+├── database.py
+├── waf.py
+├── ip_intelligence.py
+├── logger.py
+├── monitor.py
+├── requirements.txt
+├── README.md
+├── static/
+│   └── style.css
+├── templates/
+│   ├── base.html
+│   ├── dashboard.html
+│   ├── analytics.html
+│   ├── incidents.html
+│   ├── incident_details.html
+│   ├── search.html
+│   ├── blocked.html
+│   ├── error.html
+│   └── login.html
+└── .gitignore
+```
+
+Runtime files such as databases, logs, and Python cache files may be generated when the application runs.
+
+## ⚙️ Installation and Setup
+
+### 1. Install Python
+
+Install a compatible Python 3 version from:
+
+https://www.python.org/downloads/
+
+Verify the installation:
+
+```bash
+python --version
+```
+
+### 2. Clone the repository
 
 ```bash
 git clone https://github.com/suhagpatel24/SentinelShield-WAF.git
+```
+
+Navigate to the project directory:
+
+```bash
 cd SentinelShield-WAF/SentinelShield-WAF-Pro
 ```
 
-### 2. Create and activate a virtual environment
+### 3. Create a virtual environment
 
-Windows PowerShell:
+**Windows PowerShell:**
 
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+If PowerShell blocks activation, you can run the environment's Python executable directly instead.
 
-```powershell
-pip install -r requirements.txt
+### 4. Install dependencies
+
+```bash
+python -m pip install -r requirements.txt
 ```
 
-### 4. Run the application
+### 5. Run the application
 
-```powershell
+```bash
 python app.py
 ```
 
-Open http://127.0.0.1:5000 in your browser.
+### 6. Open the dashboard
 
-**Authentication:** Configure your own administrator credentials and secret key using environment variables supported by the application. Do not publish real passwords, secret keys, or other credentials.
+Open your browser and visit:
 
-## Security Testing
+http://127.0.0.1:5000/
 
-Test the application only on systems you own or have explicit permission to assess.
+Keep the terminal open while using the application. Stop the development server with `Ctrl + C`.
 
-Example test categories:
+## 🧪 Testing
 
-- SQL injection detection
-- Cross-site scripting (XSS) detection
-- Path traversal detection
-- Command-injection pattern detection
-- Request-rate monitoring
+You can evaluate the application in a local environment by:
 
-Detection results depend on the implemented rules and application configuration.
+1. Opening the dashboard and generating ordinary HTTP requests.
+2. Reviewing the request and incident statistics.
+3. Checking whether configured detection rules identify suspicious test requests.
+4. Reviewing incident details and available analytics.
+5. Testing the supported search and CSV export functionality.
 
-## API Endpoints
+Use only applications and systems you own or have explicit permission to test.
 
-The application may provide the following endpoints, depending on the configured routes:
+## 🔐 Security Notes
 
-- `/health`
-- `/api/live`
-- `/api/status`
-- `/api/system`
-- `/api/processes`
-- `/api/alerts`
-- `/api/anomaly`
-- `/api/ip/<ip>`
+- This project is intended for educational use and local defensive-security experimentation.
+- It is **not a production-ready security solution**.
+- Run it locally and do not expose the development server to the public internet.
+- Do not use Flask's debug mode in a production deployment.
+- Do not commit real user data, private logs, databases containing sensitive information, API keys, passwords, or other secrets.
+- Detection rules may produce false positives and false negatives.
+- Validate and test the implementation before relying on it to protect an application.
 
-## Security Disclaimer
+## 🚧 Future Improvements
 
-SentinelShield is an educational defensive-security project. Pattern-based detection can produce false positives and false negatives and should not be considered a replacement for a professionally configured production WAF.
+- More comprehensive SQL injection and cross-site scripting detection.
+- Improved request validation and configurable security rules.
+- Authentication and role-based access control.
+- More detailed incident severity scoring.
+- Improved IP reputation integrations.
+- Automated security testing and unit tests.
+- Docker-based deployment and continuous integration.
+- Production deployment with secure configuration and monitoring.
 
-Before deployment, configure secure credentials and secret keys, disable Flask debug mode, use HTTPS and a production-grade server, implement appropriate CSRF protection, and review access controls.
+## 🎯 Learning Objectives
 
-## Author
+This project supports hands-on learning in:
+
+- Python and Flask development.
+- Web application security fundamentals.
+- HTTP request inspection.
+- Security incident logging and analysis.
+- SQLite database integration.
+- Dashboard design and data visualization.
+- Git and GitHub project management.
+
+## 👨‍💻 Author
 
 **Suhag Patel**
 
-GitHub: [@suhagpatel24](https://github.com/suhagpatel24)
+B.Tech Computer Science and Engineering — Cybersecurity
+
+GitHub: https://github.com/suhagpatel24
+
+## 📄 Disclaimer
+
+SentinelShield is an educational cybersecurity project. It is provided for learning, testing, and authorized defensive-security activities only. The author does not guarantee that it will detect or prevent every attack. Users are responsible for ensuring that their testing and deployment comply with applicable laws and authorization requirements.
