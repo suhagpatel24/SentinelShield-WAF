@@ -1,4 +1,166 @@
-# Byte-compiled / optimized / DLL files
+```gitignore
+# ==========================================
+# Python bytecode and compiled files
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+
+# ==========================================
+# Virtual environments
+# ==========================================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ==========================================
+# Environment variables and secrets
+# ==========================================
+.env
+.env.*
+!.env.example
+.envrc
+.pypirc
+
+# ==========================================
+# Databases and runtime data
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.sqlite-journal
+instance/
+sentinelshield.db
+sentinelshield.log
+
+# ==========================================
+# Logs and temporary files
+# ==========================================
+*.log
+*.tmp
+*.temp
+tempCodeRunnerFile.py
+
+# ==========================================
+# Python packaging and distribution
+# ==========================================
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+
+# ==========================================
+# Tests and coverage
+# ==========================================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py.cover
+*.lcov
+.hypothesis/
+.pytest_cache/
+cover/
+
+# ==========================================
+# Framework caches
+# ==========================================
+.webassets-cache
+.scrapy/
+celerybeat-schedule*
+celerybeat.pid
+
+# ==========================================
+# Documentation build output
+# ==========================================
+docs/_build/
+.pybuilder/
+target/
+site/
+
+# ==========================================
+# Jupyter and interactive Python
+# ==========================================
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# ==========================================
+# Python environment managers
+# ==========================================
+.pdm-python
+.pdm-build/
+.pixi/
+__pypackages__/
+.python-version
+
+# ==========================================
+# Type checking and linting
+# ==========================================
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+cython_debug/
+
+# ==========================================
+# IDE and editor files
+# ==========================================
+.vscode/
+.idea/
+.spyderproject
+.spyproject
+.ropeproject
+
+# ==========================================
+# Local configuration and temporary state
+# ==========================================
+local_settings.py
+.abstra/
+.marimo/
+
+# ==========================================
+# Operating system files
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# Other generated data
+# ==========================================
+*.pid
+*.rdb
+*.aof
+```# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
 *$py.class
